@@ -2,7 +2,9 @@
   <section>
     <ul>
       <div v-for="item in toDo" :key="item.id">
-        <!-- {{item.name}} -->
+        <!-- <li class="bg-green" v-if="item.checked">
+          <h1>{{item.name}}</h1>
+        </li>-->
         <slot name="todo" :todoItem="item"></slot>
       </div>
     </ul>

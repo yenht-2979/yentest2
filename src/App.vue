@@ -13,38 +13,20 @@
       <add-todo @add-todo="addTodo"></add-todo>
       <div class="list">
         <ul>
-          <!-- <to-do-list
-            v-for="item in items"
-            :key="item.id"
-            :id="item.id"
-            :name="item.name"
-            :checked="item.checked"
+          <component
+            :is="selectedComponent"
+            :to-do="items"
             @delete="deleteTodo"
+            @edit="editTodo"
             @update="updateTodo"
-          ></to-do-list>-->
-          <div v-if="selectedComponent=='to-do-list'">
-            <component
-              :is="selectedComponent"
-              :to-do="items"
-              v-for="item in items"
-              :key="item.id"
-              :id="item.id"
-              :name="item.name"
-              :checked="item.checked"
-              @delete="deleteTodo"
-              @update="updateTodo"
-              @checkDoneTodo="checkDone"
-            ></component>
-          </div>
-          <div v-else>
-            <component :is="selectedComponent" :to-do="items">
-              <template v-slot:todo="{todoItem}">
-                <li class="bg-green" v-if="todoItem.checked">
-                  <h1>{{todoItem.name}}</h1>
-                </li>
-              </template>
-            </component>
-          </div>
+            @checkDoneTodo="checkDone"
+          >
+            <template v-slot:todo="{todoItem}">
+              <li class="bg-green" v-if="todoItem.checked">
+                <h1>{{todoItem.name}}</h1>
+              </li>
+            </template>
+          </component>
         </ul>
       </div>
     </header>
@@ -73,17 +55,20 @@ export default {
         {
           id: 1,
           name: "php",
-          checked: true
+          checked: true,
+          isEdit: false
         },
         {
           id: 2,
           name: "sql",
-          checked: true
+          checked: true,
+          idEdit: false
         },
         {
           id: 3,
           name: "sql22",
-          checked: false
+          checked: false,
+          isEdit: false
         }
       ]
     };
@@ -97,7 +82,8 @@ export default {
         const newTodo = {
           id: new Date().toISOString(),
           name: name,
-          checked: false
+          checked: false,
+          isEdit: false
         };
         this.items.push(newTodo);
       }
@@ -105,14 +91,19 @@ export default {
     deleteTodo(todoId) {
       this.items = this.items.filter(item => item.id !== todoId);
     },
-    updateTodo(data) {
-      const index = this.items.findIndex(item => item.id == data.id);
-      this.items[index].name = data.name;
+
+    editTodo(id) {
+      const index = this.items.findIndex(item => item.id == id);
+      this.items[index].isEdit = !this.items[index].isEdit;
     },
+
+    updateTodo(id) {
+      const index = this.items.findIndex(item => item.id == id);
+      this.items[index].isEdit = !this.items[index].isEdit;
+    },
+
     checkDone(id) {
       const index = this.items.findIndex(item => item.id == id);
-      // console.log(index);
-      // console.log(this.items[index].checked);
       this.items[index].checked = !this.items[index].checked;
     },
 
@@ -263,24 +254,10 @@ header {
 }
 
 #app .list .btn {
-  margin-left: 10px;
+  /* margin-left: 10px; */
   border-radius: 5px;
   padding: 6px 20px;
   font-size: 15px;
-}
-
-#app .list .btn-edit {
-  margin-left: 240px;
-  position: relative;
-}
-.btn-edit {
-  margin-left: 50px;
-  position: relative;
-}
-
-#app .list .btn-delete {
-  margin-left: 10px;
-  position: relative;
 }
 
 #app .list .edit {
@@ -303,10 +280,6 @@ header {
   background-color: #ec3169;
   border-color: #ec3169;
   box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.26);
-}
-
-.active {
-  background: #a7a3f6;
 }
 
 #app .list p {
