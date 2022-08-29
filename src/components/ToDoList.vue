@@ -1,45 +1,40 @@
 <template>
   <section>
-    <li :class="{ active: checkDone }">
-      <form v-if="isEdit" @submit.prevent="updateTodo">
-        <input class="input-edit" type="text" :id="data.id" v-model="data.name" />
-        <button class="btn btn-update">Update</button>
-      </form>
-      <span v-else>
-        <input
-          type="checkbox"
-          v-model="checkDone"
-          :value="checkDone"
-          @click="$emit('checkDoneTodo', id)"
-        />
-        <p>{{ name }}</p>
-        <button @click="editTodo" class="btn btn-edit">Edit</button>
-        <button @click="$emit('delete', id)" class="btn btn-delete">Remove</button>
-      </span>
-    </li>
+    <ul>
+      <div v-for="item in toDo" :key="item.id" class="box-todo">
+        <li :class="{ active: item.checked }">
+          <form v-if="item.isEdit" @submit.prevent="updateTodo(item.id)">
+            <input class="input-edit" type="text" :id="item.id" v-model="item.name" />
+            <button class="btn btn-update">Update</button>
+          </form>
+          <div v-else>
+            <input
+              type="checkbox"
+              :model="data.name"
+              :value="data.name"
+              :checked="item.checked"
+              @click="$emit('checkDoneTodo', item.id)"
+            />
+            <b>{{ item.name }}</b>
+            <button @click="$emit('edit', item.id)" class="btn btn-edit">Edit</button>
+            <button @click="$emit('delete', item.id)" class="btn btn-delete">Remove</button>
+          </div>
+        </li>
+      </div>
+    </ul>
   </section>
 </template>
 
 <script>
 export default {
   props: {
-    id: {
-      type: String,
+    toDo: {
+      type: Array,
       required: true
-    },
-    name: {
-      type: String,
-      required: true
-    },
-    checked: {
-      type: Boolean,
-      required: false,
-      default: false
     }
   },
   data() {
     return {
-      checkDone: this.checked,
       isEdit: false,
       data: {
         id: this.id,
@@ -48,22 +43,26 @@ export default {
     };
   },
   methods: {
-    checkDoneTodo() {
-      this.checkDone = !this.checkDone;
-    },
-    editTodo() {
-      this.isEdit = true;
-    },
-    updateTodo() {
-      this.$emit("update", this.data);
-      this.isEdit = false;
+    updateTodo(id) {
+      console.log(id);
+      this.$emit("update", id);
     }
   }
 };
 </script>
 <style scoped>
+.active {
+  background: #a7a3f6;
+}
 .input-edit {
   width: 50%;
   display: inline;
+}
+.box-todo {
+  width: 30rem;
+}
+.btn-edit {
+  margin-left: 150px;
+  position: relative;
 }
 </style>
