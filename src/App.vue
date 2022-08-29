@@ -47,34 +47,23 @@ export default {
   components: {
     ToDo
   },
+  computed: {
+    count() {
+      return this.$store.state.count;
+    }
+  },
 
   data() {
     return {
       selectedComponent: "to-do-list",
-      items: [
-        {
-          id: 1,
-          name: "php",
-          checked: true,
-          isEdit: false
-        },
-        {
-          id: 2,
-          name: "sql",
-          checked: true,
-          idEdit: false
-        },
-        {
-          id: 3,
-          name: "sql22",
-          checked: false,
-          isEdit: false
-        }
-      ]
+      items: this.$store.state.todoList
     };
   },
 
   methods: {
+    getAll() {
+      console.log(this.$store.getters.getAllTodoList);
+    },
     addTodo(name) {
       if (name.length === 0) {
         alert("nhap ten de");
@@ -85,7 +74,7 @@ export default {
           checked: false,
           isEdit: false
         };
-        this.items.push(newTodo);
+        this.$store.todoList.push(newTodo);
       }
     },
     deleteTodo(todoId) {
@@ -103,8 +92,9 @@ export default {
     },
 
     checkDone(id) {
-      const index = this.items.findIndex(item => item.id == id);
-      this.items[index].checked = !this.items[index].checked;
+      this.$store.commit("checkDone", id);
+      // const index = this.items.findIndex(item => item.id == id);
+      // this.items[index].checked = !this.items[index].checked;
     },
 
     setSelectedComponent(component) {
