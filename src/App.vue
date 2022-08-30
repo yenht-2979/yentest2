@@ -1,39 +1,32 @@
 <template>
   <section>
-    <to-do :to-do="items">
-      <template v-slot:todo="{todoItem}">
+    <to-do :to-do="todoList">
+      <template v-slot:todo="{ todoItem }">
         <li class="bg-yl" v-if="!todoItem.checked">
-          <h4>{{todoItem.name}}</h4>
+          <h4>{{  todoItem.name  }}</h4>
         </li>
       </template>
     </to-do>
     <header>
       <button @click="setSelectedComponent('to-do')">Completed tasks</button> &nbsp;
       <button @click="setSelectedComponent('to-do-list')">Todo tasks</button>
-      <add-todo @add-todo="addTodo"></add-todo>
+      <add-todo></add-todo>
       <div class="list">
         <ul>
-          <component
-            :is="selectedComponent"
-            :to-do="items"
-            @delete="deleteTodo"
-            @edit="editTodo"
-            @update="updateTodo"
-            @checkDoneTodo="checkDone"
-          >
-            <template v-slot:todo="{todoItem}">
+          <component :is="selectedComponent" :to-do="todoList" @checkDoneTodo="checkDone">
+            <template v-slot:todo="{ todoItem }">
               <li class="bg-green" v-if="todoItem.checked">
-                <h1>{{todoItem.name}}</h1>
+                <h1>{{  todoItem.name  }}</h1>
               </li>
             </template>
           </component>
         </ul>
       </div>
     </header>
-    <to-do :to-do="items">
-      <template v-slot:todo="{todoItem}">
+    <to-do :to-do="todoList">
+      <template v-slot:todo="{ todoItem }">
         <li class="bg-green" v-if="todoItem.checked">
-          <h1>{{todoItem.name}}</h1>
+          <h1>{{  todoItem.name  }}</h1>
         </li>
       </template>
     </to-do>
@@ -41,6 +34,9 @@
 </template>
 
 <script>
+//import { mapActions, mapState, mapMutations, mapGetters } from 'vuex'
+
+import { mapState, mapGetters, mapMutations } from "vuex";
 import ToDo from "./components/ToDo.vue";
 
 export default {
@@ -48,54 +44,20 @@ export default {
     ToDo
   },
   computed: {
-    count() {
-      return this.$store.state.count;
-    }
+    ...mapState("Todo", ["todoList"]),
+    ...mapGetters("Todo", ["getAllTodoList"])
+
   },
 
   data() {
     return {
-      selectedComponent: "to-do-list",
-      items: this.$store.state.todoList
+      selectedComponent: "to-do-list"
+      // items: this.$store.state.todoList
     };
   },
 
   methods: {
-    getAll() {
-      console.log(this.$store.getters.getAllTodoList);
-    },
-    addTodo(name) {
-      if (name.length === 0) {
-        alert("nhap ten de");
-      } else {
-        const newTodo = {
-          id: new Date().toISOString(),
-          name: name,
-          checked: false,
-          isEdit: false
-        };
-        this.$store.todoList.push(newTodo);
-      }
-    },
-    deleteTodo(todoId) {
-      this.items = this.items.filter(item => item.id !== todoId);
-    },
-
-    editTodo(id) {
-      const index = this.items.findIndex(item => item.id == id);
-      this.items[index].isEdit = !this.items[index].isEdit;
-    },
-
-    updateTodo(id) {
-      const index = this.items.findIndex(item => item.id == id);
-      this.items[index].isEdit = !this.items[index].isEdit;
-    },
-
-    checkDone(id) {
-      this.$store.commit("checkDone", id);
-      // const index = this.items.findIndex(item => item.id == id);
-      // this.items[index].checked = !this.items[index].checked;
-    },
+    ...mapMutations('Todo', ['checkDone']),
 
     setSelectedComponent(component) {
       this.selectedComponent = component;
@@ -125,7 +87,7 @@ header {
   color: white;
   text-align: center;
   width: 70%;
-  max-width: 35rem;
+  max-width: 45rem;
 }
 
 #app .head {
@@ -284,15 +246,18 @@ header {
   font: inherit;
   padding: 0.15rem;
 }
+
 #app label {
   font-weight: bold;
   margin-right: 1rem;
   width: 7rem;
   display: inline-block;
 }
+
 #app form div {
   margin: 1rem 0;
 }
+
 section {
   display: flex;
   justify-content: space-around;
@@ -301,9 +266,11 @@ section {
 .bg-yl {
   background-color: yellow;
 }
+
 .bg-green {
   background-color: greenyellow;
 }
+
 h1 {
   font-size: 2em;
 }

@@ -20,9 +20,11 @@ section {
   width: 200px;
   margin: 30px;
 }
+
 section > ul {
   width: 200px;
 }
+
 li {
   color: brown;
 }

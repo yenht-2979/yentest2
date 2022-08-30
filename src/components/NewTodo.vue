@@ -1,8 +1,8 @@
 <template>
-  <form @submit.prevent="submitData" class="add-new">
+  <form @submit.prevent="addTodo" class="add-new">
     <h4>Add:</h4>
     <div>
-      <input type="text" v-model="enterTodo" />
+      <input type="text" v-model="todoSeleted.name" />
     </div>
     <div>
       <button>Add Todo</button>
@@ -10,17 +10,17 @@
   </form>
 </template>
 <script>
+
+import { mapState, mapMutations } from "vuex";
 export default {
-  emits: ["add-todo"],
-  data() {
-    return {
-      enterTodo: ""
-    };
-  },
   methods: {
-    submitData() {
-      this.$emit("add-todo", this.enterTodo);
-    }
+    ...mapMutations('Todo', ['addTodo'])
+  },
+
+  computed: {
+    ...mapState('Todo', [
+      'todoSeleted',
+    ]),
   }
-};
+}
 </script>
