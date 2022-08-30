@@ -1,23 +1,17 @@
 <template>
   <section>
     <ul>
-      <div v-for="item in toDo" :key="item.id" class="box-todo">
+      <div v-for="item in todoList" :key="item.id" class="box-todo">
         <li :class="{ active: item.checked }">
-          <form v-if="item.isEdit" @submit.prevent="updateTodo(item.id)">
-            <input class="input-edit" type="text" :id="item.id" v-model="item.name" />
-            <button class="btn btn-update">Update</button>
+          <form v-if="item.isEdit" @submit.prevent="updateTodolist(item.id)">
+            <input class="input-edit" type="text" v-model="item.name" />
+            <button type="submit" class="btn btn-update">Update</button>
           </form>
           <div v-else>
-            <input
-              type="checkbox"
-              :model="data.name"
-              :value="data.name"
-              :checked="item.checked"
-              @click="$emit('checkDoneTodo', item.id)"
-            />
-            <b>{{ item.name }}</b>
-            <button @click="$emit('edit', item.id)" class="btn btn-edit">Edit</button>
-            <button @click="$emit('delete', item.id)" class="btn btn-delete">Remove</button>
+            <input type="checkbox" :checked="item.checked" @click="$emit('checkDoneTodo', item.id)" />
+            <b>{{  item.name  }}</b>
+            <button @click="editTodolist(item.id)" class="btn btn-edit">Edit</button>
+            <button @click="deteleTodolist(item.id)" class="btn btn-delete">Remove</button>
           </div>
         </li>
       </div>
@@ -26,6 +20,8 @@
 </template>
 
 <script>
+import { mapState, mapGetters, mapMutations } from "vuex";
+
 export default {
   props: {
     toDo: {
@@ -33,20 +29,22 @@ export default {
       required: true
     }
   },
+
   data() {
-    return {
-      isEdit: false,
-      data: {
-        id: this.id,
-        name: this.name
-      }
-    };
+    return {};
   },
+
+  computed: {
+    ...mapState("Todo", ["todoList"]),
+    ...mapGetters("Todo", ["getAllTodoList"])
+  },
+
   methods: {
-    updateTodo(id) {
-      console.log(id);
-      this.$emit("update", id);
-    }
+    ...mapMutations('Todo', [
+      'deteleTodolist',
+      'editTodolist',
+      'updateTodolist',
+    ]),
   }
 };
 </script>
@@ -54,15 +52,18 @@ export default {
 .active {
   background: #a7a3f6;
 }
+
 .input-edit {
   width: 50%;
   display: inline;
 }
+
 .box-todo {
-  width: 30rem;
+  width: 40rem;
 }
+
 .btn-edit {
-  margin-left: 150px;
+  margin-left: 180px;
   position: relative;
 }
 </style>
