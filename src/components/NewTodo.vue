@@ -10,17 +10,14 @@
   </form>
 </template>
 <script>
-
 import { mapState, mapMutations } from "vuex";
 export default {
   methods: {
-    ...mapMutations('Todo', ['addTodo'])
+    ...mapMutations("Todo", ["addTodo"])
   },
 
   computed: {
-    ...mapState('Todo', [
-      'todoSeleted',
-    ]),
+    ...mapState("Todo", ["todoSeleted"])
   }
-}
+};
 </script>

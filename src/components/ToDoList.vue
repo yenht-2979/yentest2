@@ -9,7 +9,7 @@
           </form>
           <div v-else>
             <input type="checkbox" :checked="item.checked" @click="$emit('checkDoneTodo', item.id)" />
-            <b>{{  item.name  }}</b>
+            <b>{{ item.name }}</b>
             <button @click="editTodolist(item.id)" class="btn btn-edit">Edit</button>
             <button @click="deteleTodolist(item.id)" class="btn btn-delete">Remove</button>
           </div>
@@ -40,11 +40,11 @@ export default {
   },
 
   methods: {
-    ...mapMutations('Todo', [
-      'deteleTodolist',
-      'editTodolist',
-      'updateTodolist',
-    ]),
+    ...mapMutations("Todo", [
+      "deteleTodolist",
+      "editTodolist",
+      "updateTodolist"
+    ])
   }
 };
 </script>

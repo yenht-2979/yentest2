@@ -3,7 +3,7 @@
     <to-do :to-do="todoList">
       <template v-slot:todo="{ todoItem }">
         <li class="bg-yl" v-if="!todoItem.checked">
-          <h4>{{  todoItem.name  }}</h4>
+          <h4>{{ todoItem.name }}</h4>
         </li>
       </template>
     </to-do>
@@ -16,7 +16,7 @@
           <component :is="selectedComponent" :to-do="todoList" @checkDoneTodo="checkDone">
             <template v-slot:todo="{ todoItem }">
               <li class="bg-green" v-if="todoItem.checked">
-                <h1>{{  todoItem.name  }}</h1>
+                <h1>{{ todoItem.name }}</h1>
               </li>
             </template>
           </component>
@@ -26,7 +26,7 @@
     <to-do :to-do="todoList">
       <template v-slot:todo="{ todoItem }">
         <li class="bg-green" v-if="todoItem.checked">
-          <h1>{{  todoItem.name  }}</h1>
+          <h1>{{ todoItem.name }}</h1>
         </li>
       </template>
     </to-do>
@@ -46,7 +46,6 @@ export default {
   computed: {
     ...mapState("Todo", ["todoList"]),
     ...mapGetters("Todo", ["getAllTodoList"])
-
   },
 
   data() {
@@ -57,7 +56,7 @@ export default {
   },
 
   methods: {
-    ...mapMutations('Todo', ['checkDone']),
+    ...mapMutations("Todo", ["checkDone"]),
 
     setSelectedComponent(component) {
       this.selectedComponent = component;
@@ -264,11 +263,11 @@ section {
 }
 
 .bg-yl {
-  background-color: yellow;
+  background-color: rgb(90, 99, 122);
 }
 
 .bg-green {
-  background-color: greenyellow;
+  background-color: rgb(151, 223, 45);
 }
 
 h1 {
