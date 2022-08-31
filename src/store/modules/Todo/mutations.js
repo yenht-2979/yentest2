@@ -10,19 +10,19 @@ export function addTodo(state) {
       id: Date.now(),
       name: state.todoSeleted.name,
       checked: false,
-      isEdit: false
+      isEdit: false,
     };
-    state.todoSeleted.name = '';
+    state.todoSeleted.name = "";
 
     state.todoList.push(objTodo);
   } else {
-    alert('nhap ten de');
+    alert("nhap ten de");
   }
 }
 
 export function deteleTodolist(state, id) {
   const index = state.todoList.findIndex((item) => item.id == id);
-  console.log(index);
+
   state.todoList.splice(index, 1);
 }
 
@@ -33,5 +33,10 @@ export function editTodolist(state, id) {
 
 export function updateTodolist(state, id) {
   const index = state.todoList.findIndex((item) => item.id == id);
-  state.todoList[index].isEdit = false;
+
+  if (state.todoList[index].name) {
+    state.todoList[index].isEdit = false;
+  } else {
+    alert("ko duoc de trong");
+  }
 }
